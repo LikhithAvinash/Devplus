@@ -1,0 +1,71 @@
+# Render Blueprint - https://render.com/docs/blueprint-spec
+# After pushing to GitHub, connect repo in Render dashboard and set environment variables
+
+services:
+  # Backend API Service
+  - type: web
+    name: agg-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    region: oregon
+    plan: free
+    healthCheckPath: /
+    envVars:
+      # Database connection (auto-populated from the database below)
+      - key: DATABASE_URL
+        fromDatabase:
+          name: agg-database
+          property: connectionString
+      # Auth
+      - key: JWT_TOKEN_SECRET
+        sync: false  # Set manually in Render dashboard
+      # API Keys - Set these in Render dashboard
+      - key: DEVTO_API_KEY
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: REDDIT_CLIENT_ID
+        sync: false
+      - key: REDDIT_CLIENT_SECRET
+        sync: false
+      - key: REDDIT_USERNAME
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: Product_hunt_API_Key
+        sync: false
+      - key: Product_hunt_API_Secret
+        sync: false
+      - key: Redirect_URI
+        value: https://localhost
+      # Postgres credentials for entrypoint script
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: agg-database
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: agg-database
+          property: password
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: agg-database
+          property: database
+
+  # Frontend Static Site
+  - type: web
+    name: agg-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    region: oregon
+    plan: free
+
+# PostgreSQL Database
+databases:
+  - name: agg-database
+    plan: free
+    region: oregon
+    databaseName: agg_db
+    user: agg_user

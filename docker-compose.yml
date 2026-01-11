@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: agg-backend
+    ports:
+      - "8000:8000"
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-agg_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-agg_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-agg_db}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://agg_user:agg_pass@127.0.0.1:5432/agg_db}
+    volumes:
+      - backend-pgdata:/var/lib/postgresql/data
+      - ./.env:/app/.env:ro
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: agg-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+
+volumes:
+  backend-pgdata:
+    driver: local
