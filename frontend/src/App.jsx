@@ -100,7 +100,7 @@ const Dashboard = () => {
     'knowledge': 'Knowledge'
   };
 
-  const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+  const API_BASE = import.meta.env.VITE_API_URL || 'https://agg-backend-nvng.onrender.com';
 
   // Check if current source is Reddit
   const currentSource = allSources.find(s => String(s.id) === sourceId);
