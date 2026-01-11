@@ -16,7 +16,7 @@ app = FastAPI(title="DevPulse API")
 origins = [
     "http://localhost:5173", # Vite default port
     "http://localhost:3000",
-    "https://agg-backend-nvng.onrender.com"
+    "https://agg-frontend-9244.onrender.com"
 ]
 
 app.add_middleware(
