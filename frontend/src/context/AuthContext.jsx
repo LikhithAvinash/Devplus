@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await fetch('http://localhost:8000/me', {
+          const response = await fetch('https://agg-backend-nvng.onrender.com', {
             headers: {
               'Authorization': `Bearer ${token}`
             }
