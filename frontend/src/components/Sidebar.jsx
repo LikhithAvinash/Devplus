@@ -31,7 +31,7 @@ const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+  const API_BASE = import.meta.env.VITE_API_URL || 'https://agg-backend-nvng.onrender.com';
   const [sources, setSources] = useState([]);
   const searchParams = new URLSearchParams(location.search);
   const selectedSourceId = searchParams.get('source_id');
