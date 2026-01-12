@@ -10,6 +10,52 @@ import feeds
 # Create tables
 models.Base.metadata.create_all(bind=engine)
 
+def seed_if_empty():
+    """Seed the database with sources if it's empty"""
+    db = database.SessionLocal()
+    try:
+        # Check if sources exist
+        count = db.query(models.Source).count()
+        if count == 0:
+            print("📦 Database is empty, seeding sources...")
+            
+            sources_data = [
+                # News & Discussions
+                {"name": "Hacker News", "url": "https://hacker-news.firebaseio.com/v0/", "feed_type": "API", "category": "News & Discussions", "icon": "Y"},
+                {"name": "Reddit", "url": "https://www.reddit.com/r/learnprogramming/.rss", "feed_type": "RSS", "category": "News & Discussions", "icon": "reddit"},
+                {"name": "Lobste.rs", "url": "https://lobste.rs/hottest.json", "feed_type": "JSON", "category": "News & Discussions", "icon": "lobster"},
+                {"name": "Techmeme", "url": "https://www.techmeme.com/feed.xml", "feed_type": "RSS", "category": "News & Discussions", "icon": "techmeme"},
+                {"name": "Ars Technica", "url": "https://feeds.arstechnica.com/arstechnica/index", "feed_type": "RSS", "category": "News & Discussions", "icon": "ars"},
+                {"name": "Slashdot", "url": "http://rss.slashdot.org/Slashdot/slashdot", "feed_type": "RSS", "category": "News & Discussions", "icon":  "slashdot"},
+                
+                # Code, Tools & Products
+                {"name": "GitHub Trending", "url": "https://github.com/trending", "feed_type": "Scraping", "category": "Code, Tools & Products", "icon": "github"},
+                {"name": "Product Hunt", "url": "https://www.producthunt.com/feed", "feed_type": "RSS", "category": "Code, Tools & Products", "icon": "producthunt"},
+                {"name":  "The Changelog", "url": "https://changelog.com/feed", "feed_type": "RSS", "category":  "Code, Tools & Products", "icon": "changelog"},
+                
+                # Knowledge & Tutorials
+                {"name": "Tech Blog", "url": "https://medium.com/feed/netflix-techblog", "feed_type": "RSS", "category":  "Knowledge & Tutorials", "icon": "techblog"},
+                {"name": "DEV.to", "url": "https://dev.to/api/articles", "feed_type": "API", "category": "Knowledge & Tutorials", "icon": "dev"},
+                {"name": "HackerNoon", "url": "https://hackernoon.com/feed", "feed_type": "RSS", "category": "Knowledge & Tutorials", "icon": "hackernoon"}
+            ]
+            
+            for source in sources_data:
+                new_source = models.Source(**source)
+                db.add(new_source)
+                print(f"  ✅ Added {source['name']}")
+            
+            db. commit()
+            print("✨ Seeding complete!")
+        else:
+            print(f"✅ Database already has {count} sources")
+    except Exception as e:
+        print(f"❌ Error seeding database: {e}")
+    finally:
+        db.close()
+
+# Run seeding on startup
+seed_if_empty()
+
 app = FastAPI(title="DevPulse API")
 
 # CORS Setup
