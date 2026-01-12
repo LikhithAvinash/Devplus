@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
       setToken(data.access_token);
       
       // Fetch user details immediately
-      const userResponse = await fetch('http://localhost:8000/me', {
+      const userResponse = await fetch('https://agg-backend-nvng.onrender.com', {
         headers: {
           'Authorization': `Bearer ${data.access_token}`
         }
