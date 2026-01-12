@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (username, password) => {
-    const response = await fetch('http://localhost:8000/login', {
+    const response = await fetch('https://agg-backend-nvng.onrender.com', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (username, email, password) => {
-    const response = await fetch('http://localhost:8000/register', {
+    const response = await fetch('https://agg-backend-nvng.onrender.com', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
