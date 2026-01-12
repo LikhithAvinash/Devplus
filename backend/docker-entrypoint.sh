@@ -51,6 +51,10 @@ fi
 
 export DATABASE_URL=${DATABASE_URL:-"postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@127.0.0.1:5432/${POSTGRES_DB}"}
 
+# NEW: Run seeds to populate feed sources
+echo "Running database seeds..."
+python seeds.py
+
 uvicorn main:app --host 0.0.0.0 --port 8000 &
 UVICORN_PID=$!
 
