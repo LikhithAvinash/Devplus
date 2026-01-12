@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await fetch('https://agg-backend-nvng.onrender.com', {
+          const response = await fetch('https://agg-backend-nvng.onrender.com/me', {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (username, password) => {
-    const response = await fetch('https://agg-backend-nvng.onrender.com', {
+    const response = await fetch('https://agg-backend-nvng.onrender.com/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
       setToken(data.access_token);
       
       // Fetch user details immediately
-      const userResponse = await fetch('https://agg-backend-nvng.onrender.com', {
+      const userResponse = await fetch('https://agg-backend-nvng.onrender.com/me', {
         headers: {
           'Authorization': `Bearer ${data.access_token}`
         }
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (username, email, password) => {
-    const response = await fetch('https://agg-backend-nvng.onrender.com', {
+    const response = await fetch('https://agg-backend-nvng.onrender.com/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
