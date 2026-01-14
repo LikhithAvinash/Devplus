@@ -36,7 +36,11 @@ PRODUCT_HUNT_API_SECRET = os.getenv("Product_hunt_API_Secret")
 def fetch_rss(url: str) -> List[dict]:
     """Fetch and parse RSS/Atom feeds."""
     try:
-        parsed = feedparser.parse(url)
+         # Use browser-like User-Agent to avoid blocking
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+        parsed = feedparser.parse(url, request_headers=headers)  # ← ADD request_headers
         # bozo can be set even for valid feeds with minor issues, so check entries too
         if parsed.bozo and not parsed.entries:
             raise HTTPException(status_code=502, detail=f"Failed to parse RSS feed: {url}")
