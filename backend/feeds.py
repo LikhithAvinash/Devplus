@@ -36,17 +36,28 @@ PRODUCT_HUNT_API_SECRET = os.getenv("Product_hunt_API_Secret")
 def fetch_rss(url: str) -> List[dict]:
     """Fetch and parse RSS/Atom feeds."""
     try:
-         # Use browser-like User-Agent to avoid blocking
+        # Fetch with requests first using browser-like headers
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Accept": "application/rss+xml, application/xml, application/atom+xml, text/xml, */*",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Accept-Encoding": "gzip, deflate",
+            "Connection":  "keep-alive"
         }
-        parsed = feedparser.parse(url, request_headers=headers)  # ← ADD request_headers
-        # bozo can be set even for valid feeds with minor issues, so check entries too
+        
+        # Fetch the feed content
+        response = requests.get(url, headers=headers, timeout=15)
+        response.raise_for_status()
+        
+        # Parse the fetched content
+        parsed = feedparser.parse(response.content)
+        
+        # Check if parsing was successful
         if parsed.bozo and not parsed.entries:
             raise HTTPException(status_code=502, detail=f"Failed to parse RSS feed: {url}")
 
         items = []
-        for entry in parsed.entries[:30]:
+        for entry in parsed.entries[: 30]: 
             items.append({
                 "title": entry.get("title"),
                 "link": entry.get("link"),
@@ -56,6 +67,8 @@ def fetch_rss(url: str) -> List[dict]:
         return items
     except HTTPException:
         raise
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=502, detail=f"Failed to fetch RSS feed {url}: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"RSS fetch error for {url}: {str(e)}")
 
