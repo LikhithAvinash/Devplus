@@ -274,7 +274,7 @@ def get_all_feeds(sort: str = "hot", category:  str = None, db: Session = Depend
     
     return all_items
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def read_root():
     return {"message": "Welcome to DevPulse API"}
 
