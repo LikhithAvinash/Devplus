@@ -1,6 +1,9 @@
+
 # 🚀 DevPulse - Developer News Aggregator
 
 > A modern, real-time developer news aggregator that brings content from multiple sources into one beautiful interface.
+<img width="1920" height="1080" alt="Screenshot from 2026-06-08 23-21-31" src="https://github.com/user-attachments/assets/10107da3-7824-4d78-9f43-4ae44ad5f497" />
+
 
 ![Tech Stack](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-blue)
 ![Tech Stack](https://img.shields.io/badge/Backend-FastAPI%20%2B%20Python-green)
